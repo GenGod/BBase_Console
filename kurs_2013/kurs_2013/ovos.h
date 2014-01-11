@@ -9,9 +9,10 @@ private:
 	double kol;
 	bool gmo;
 	double price;
+	double shelf_life;
 public:
 	ovos(void);
-	ovos(string str, double dob, bool boo, double doo);
+	ovos(string str, double dob, bool boo, double doo, double shelf_lif);
 	void print_msg();
 	void set_smth(bool boo);
 	bool get_smth();
@@ -30,6 +31,8 @@ public:
 			output << "GMOs are present";
 		output << "\nPrice is: ";
 		output << fru.get_price();
+		output << "\nShelf life is: ";
+		output << fru.get_shelf_life();
 		output << " \n\n\n";
 		return output;
 	}

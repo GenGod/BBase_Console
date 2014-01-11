@@ -9,9 +9,10 @@ private:
 	double kol;
 	string country;
 	double price;
+	double shelf_life;
 public:
 	fruit(void);
-	fruit(string str, double dob, string stri, double doo);
+	fruit(string str, double dob, string stri, double doo, double shelf_lif);
 	void print_msg();
 	void ust_smth();
 	string get_smth();
@@ -23,10 +24,12 @@ public:
 		output << " \n";
 		output << "How many: ";
 		output << fru.get_kol();
-		output << " êã \nCountry of origin: ";
+		output << " lb \nCountry of origin: ";
 		output << fru.get_smth();
 		output << "\nPrice is: ";
 		output << fru.get_price();
+		output << "\nShelf life is: ";
+		output << fru.get_shelf_life();
 		output << " \n\n\n";
 		return output;
 	}

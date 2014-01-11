@@ -6,13 +6,15 @@ fruit::fruit(void)
 		kol = 1;
 		country = "Turkey";
 		price = 10;
+		shelf_life = 3;
 	}
-fruit::fruit(string str, double dob, string stri, double doo)
+fruit::fruit(string str, double dob, string stri, double doo, double shelf_lif)
 	{
 		type = str;
 		kol = dob;
 		country = stri;
 		price = doo;
+		shelf_life = shelf_lif;
 	}
 string fruit::get_smth()
 	{
@@ -24,7 +26,7 @@ void fruit::set_smth(string stri)
 	}
 void fruit::print_msg()
 {
-	cout << "Enter the name of fruit, the amount in lb, the price for 1 lb of fruit and the country of origin:" << endl << endl;
+	cout << "Enter the name of fruit, the amount in lb, the price for 1 lb of fruit, the country of origin and shelf life of fruit:" << endl << endl;
 }
 
 void fruit::ust_smth()

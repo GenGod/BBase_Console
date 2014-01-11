@@ -28,13 +28,17 @@ void swapt(T &fru, T &fgh)
 void print_smth(vector<fruit> fru)
 {
 	vector<fruit>::iterator ou = fru.begin();
-	for (ou; ou != fru.end(); ou++)
+	if (ou == fru.end())
+		cout << "BBase is empty.\n";
+	else for (ou; ou != fru.end(); ou++)
 		cout << *ou;
 }
 
 void print_smth(vector<ovos> ovo)
 {
 	vector<ovos>::iterator ou = ovo.begin();
+	if (ou == ovo.end())
+		cout << "BBase is empty.\n";
 	for (ou; ou != ovo.end(); ou++)
 		cout << *ou;
 }
@@ -136,6 +140,92 @@ void delete_smth(vector<fruit>& vfru)
 	}
 }
 
+void trans_sybd(vector<ovos> &vovo, vector<fruit> &vfruit)
+{
+	string str;
+	ovos vovos;
+	fruit vfru;
+	double doo;
+	cout << "Enter the product name to search and transfer:" << endl;
+	cin >> str;
+	vector<ovos>::iterator uo = search_smth(vovo, str);
+	str = uo->get_type();
+	vfru.set_type(str);
+	doo = uo->get_kol();
+	vfru.set_kol(doo);
+	doo = uo->get_price();
+	vfru.set_price(doo);
+	doo = uo->get_shelf_life();
+	vfru.set_shelf_life(doo);
+	cout << "Specify the country of origin:" << endl;
+	cin >> str;
+	vfru.set_smth(str);
+	vfruit.push_back(vfru);
+}
+
+void trans_sybd(vector<fruit> &vfruit, vector<ovos> &vovo)
+{
+	string syr;
+	bool boo;
+	string str;
+	double doo;
+	fruit vfru;
+	ovos vovos;
+	cout << "Enter the product name to search and transfer:" << endl;
+	cin >> syr;
+	vector<fruit>::iterator uo = search_smth(vfruit,syr);
+	str = uo->get_type();
+	vovos.set_type(str);
+	doo = uo->get_kol();
+	vovos.set_kol(doo);
+	doo = uo->get_price();
+	vovos.set_price(doo);
+	doo = uo->get_shelf_life();
+	vovos.set_shelf_life(doo);
+	cout << "Enter a new presence indicator of GMOs (1 - yes, 0 - no):" << endl;
+	cin >> boo;
+	vovos.set_smth(boo);
+	vovo.push_back(vovos);
+}
+
+double profit(vector<ovos> vovos)
+{
+	double prof, kj, fh;
+	vector<ovos>::iterator ip;
+	if (ip != vovos.end())
+	{
+		for (ip = vovos.begin(); ip != vovos.end(); ip++)
+		{
+			kj = ip->get_price();
+			fh = ip->get_kol();
+			prof = (kj)*(fh);
+		}
+		double ght = prof;
+		prof = prof - (((prof / 100) + (fmod(ght, 100)) * 16));
+		return prof;
+	}
+	else return 0;
+}
+
+double profit(vector<fruit> vfru)
+{
+	double prof, fd, ds;
+	vector<fruit>::iterator ip;
+	if (ip != vfru.end())
+	{
+		for (ip = vfru.begin(); ip != vfru.end(); ip++)
+		{
+			fd = ip->get_price();
+			ds = ip->get_kol();
+			prof = (fd)*(ds);
+		}
+		double ghu = prof;
+		prof = prof - (((prof / 100) + (fmod(ghu, 100)) * 16));
+		return prof;
+	}
+	else return 0;
+}
+
 void add_smth(vector<ovos>& vovos)
 {
 	int g=0;
@@ -154,6 +244,8 @@ void add_smth(vector<ovos>& vovos)
 		gu.set_price(dod);
 		cin >> r;
 		gu.set_smth(r);
+		cin >> dod;
+		gu.set_shelf_life(dod);
 		vovos.push_back(gu);
 		int f;
 		cout << "1. Back to menu\n2.Add more vegetable\n";
@@ -172,7 +264,6 @@ void add_smth(vector<ovos>& vovos)
 	}
 }
 
-//template <class T>
 void add_smth(vector<fruit>& vfru)
 {
 	double dod;
@@ -190,6 +281,8 @@ void add_smth(vector<fruit>& vfru)
 			fu.set_price(dod);
 			cin >> str;
 			fu.set_smth(str);
+			cin >> dod;
+			fu.set_shelf_life(dod);
 		vfru.push_back(fu);
 		int f;
 		cout << "1. Back to menu\n2.Add more fruit\n";
@@ -235,6 +328,7 @@ void file_save(vector<T>& vovos, int right, string username)
 			  cout << "Enter filename to save a data (if it does not exist, one will be created):" << endl;
 			  cin >> name_p;
 			  put += name_p;
+			  put += ".dba";
 			  ofstream out(put);
 			  for (uy; uy != vovos.end(); uy++)
 			  {
@@ -245,6 +339,8 @@ void file_save(vector<T>& vovos, int right, string username)
 				  out << uy->get_price();
 				  out << " ";
 				  out << uy->get_smth();
+				  out << " ";
+				  out << uy->get_shelf_life();
 				  out << "\n";
 			  }
 			  cout << "Data has been successfully saved!\n";
@@ -262,10 +358,11 @@ void file_save(vector<T>& vovos, int right, string username)
 			  cout << "Enter filename to save a data (if it does not exist, one will be created)" << endl;
 			  cin >> name_p;
 			  put += name_p;
+			  put += ".dba";
 			  ofstream out(put);
 			  for (uy; uy != vovos.end(); uy++)
 			  {
-				  out << uy->get_type() << " " << uy->get_kol() << " " << uy->get_price() << " " << uy->get_smth() << "\n";
+				  out << uy->get_type() << " " << uy->get_kol() << " " << uy->get_price() << " " << uy->get_smth() << " " << uy->get_shelf_life()<< "\n";
 				  if (j < 10)
 					  j++;
 				  else break;
@@ -287,7 +384,7 @@ vector<fruit> load_file(int right)
 	vector<fruit> vovos;
 	string put;
 	string str, dfg;
-	double dod, dob;
+	double dod, dob, goh;
 	fruit voso;
 	cout << "Enter path to file as: C:\\Folder_Name\\File_Name.dba\n";
 	cin >> put;
@@ -304,11 +401,12 @@ vector<fruit> load_file(int right)
 		{
 				  while (in)
 				  {
-					  in >> str >> dod >> dob >> dfg;
+					  in >> str >> dod >> dob >> dfg >> goh;
 					  voso.set_type(str);
 					  voso.set_kol(dod);
 					  voso.set_price(dob);
 					  voso.set_smth(dfg);
+					  voso.set_shelf_life(goh);
 					  vovos.push_back(voso);
 				  }
 				  vovos.pop_back();
@@ -321,11 +419,12 @@ vector<fruit> load_file(int right)
 				  int j = 0;
 				  while (in)
 				  {
-					  in >> str >> dod >> dob >> dfg;
+					  in >> str >> dod >> dob >> dfg >> goh;
 					  voso.set_type(str);
 					  voso.set_kol(dod);
 					  voso.set_price(dob);
 					  voso.set_smth(dfg);
+					  voso.set_shelf_life(goh);
 					  vovos.push_back(voso);
 					  if (j < 9)
 						  j++;
@@ -337,11 +436,12 @@ vector<fruit> load_file(int right)
 		case 3:
 		{
 				  cout << "In trial version you can load from the file one item only." << endl;
-				  in >> str >> dod >> dob >> dfg;
+				  in >> str >> dod >> dob >> dfg >> goh;
 				  voso.set_type(str);
 				  voso.set_kol(dod);
 				  voso.set_price(dob);
 				  voso.set_smth(dfg);
+				  voso.set_shelf_life(goh);
 				  vovos.push_back(voso);
 				  cout << "Data from the file has been successfully added!\n";
 				  break;
@@ -358,7 +458,7 @@ vector<ovos> load_file(double right2)
 	string put;
 	int right = int(right2);
 	string str;
-	double dob, dod;
+	double dob, dod, goh;
 	bool boo;
 	ovos voso;
 	cout << "Enter path to file as: C:\\Folder_Name\\File_Name.dba\n";
@@ -376,11 +476,12 @@ vector<ovos> load_file(double right2)
 		{
 				  while (in)
 				  {
-					  in >> str >> dod >> dob >> boo;
+					  in >> str >> dod >> dob >> boo >>goh;
 					  voso.set_type(str);
 					  voso.set_kol(dod);
 					  voso.set_price(dob);
 					  voso.set_smth(boo);
+					  voso.set_shelf_life(goh);
 					  vovos.push_back(voso);
 				  }
 				  vovos.pop_back();
@@ -393,11 +494,12 @@ vector<ovos> load_file(double right2)
 				  int j = 0;
 				  while (in)
 				  {
-					  in >> str >> dod >> dob >> boo;
+					  in >> str >> dod >> dob >> boo >> goh;
 					  voso.set_type(str);
 					  voso.set_kol(dod);
 					  voso.set_price(dob);
 					  voso.set_smth(boo);
+					  voso.set_shelf_life(goh);
 					  vovos.push_back(voso);
 					  if (j < 9)
 						  j++;
@@ -409,11 +511,12 @@ vector<ovos> load_file(double right2)
 		case 3:
 		{
 				  cout << "In trial version you can load from the file one item only." << endl;
-				  in >> str >> dod >> dob >> boo;
+				  in >> str >> dod >> dob >> boo >> goh;
 				  voso.set_type(str);
 				  voso.set_kol(dod);
 				  voso.set_price(dob);
 				  voso.set_smth(boo);
+				  voso.set_shelf_life(goh);
 				  vovos.push_back(voso);
 				  cout << "Data from the file has been successfully added!\n";
 				  break;
@@ -426,184 +529,301 @@ vector<ovos> load_file(double right2)
 void menu(vector<ovos>& vovos, vector<fruit>& vfru, int right, string user_name)
 {
 	int h;
+	int d;
 	int t = 0;
+	int e = 0;
 	double right2 = right;
 	while (1)
 	{
-		cout << "What you want to do?\n1. Add a new vegetable\n2. Add a new fruit\n3. Delete an existing vegetable\n4. Delete an existing fruit\n5. Find a vegetable in BBase\n6. Find a ftuit in BBase\n7. Save BBase of vegetables to disk\n8. Save BBase of fruits to disk\n9. Load BBase of vegetables from the disk\n10. Load BBase of fruits from the disk\n11. Show BBase of vegetables on the screen\n12. Show BBase of fruits on the screen\n13. Exit the program\n" << endl;
-		cin >> h;
-		switch (h)
+		cout << "What you want to work?\n1. Vegetables\n2. Fruit\n3. Exit program" << endl;
+		cin >> d;
+		switch (d)
 		{
 		case 1:
 		{
-				  add_smth(vovos);
+				  while (1)
+				  {
+					  t = 0;
+					  cout << "What you want to do?\n1. Add a new vegetable\n2. Delete an existing vegetable\n3. Find a vegetable in BBase\n4. Save BBase of vegetables to disk\n5. Load BBase of vegetables from the disk\n6. Show BBase of vegetables on the screen\n7. Move product to the category 'Fruit' \n8. Profits from the sale of all vegetable stock including tax equal\n9.Return to previous menu\n" << endl;
+					  cin >> h;
+					  switch (h)
+					  {
+					  case 1:
+					  {
+								add_smth(vovos);
+								break;
+					  }
+					  case 2:
+					  {
+								delete_smth(vovos);
+								break;
+					  }
+					  case 3:
+					  {
+								string str;
+								int f;
+								while (1)
+								{
+									int z = 0;
+									cout << "Enter name of vegetable to search:\n" << endl;
+									cin >> str;
+									vector<ovos>::iterator ut = search_smth(vovos, str);
+									if (ut != vovos.end())
+									{
+										cout << "Change information about it?\n1.Yes\n2.No\n3.Return to menu\n\n\n";
+										cin >> f;
+										switch (f)
+										{
+										case 1:
+										{
+												  while (1)
+												  {
+													  int k;
+													  cout << "What would you like to change?\n1.The name\n2.The price (1 lb)\n3.GMO\n4.Amount (in lb)\n5. Shelf life (in month)\n6. Return to previous menu\n\n\n";
+													  cin >> k;
+													  switch (k)
+													  {
+													  case 1:
+													  {
+																cout << "Enter new vegetable name: \n";
+																ut->ust_string();
+																break;
+													  }
+													  case 2:
+													  {
+																cout << "Enter new vegetable price:\n";
+																ut->ust_double();
+																break;
+													  }
+													  case 3:
+													  {
+																cout << "Enter a new indicator of presence of GMOs (1 - yes, 0 - no)\n";
+																ut->ust_bool();
+																break;
+													  }
+													  case 4:
+													  {
+																cout << "Enter new vegetable amount (in lb)\n";
+																ut->ust_doub();
+																break;
+													  }
+													  case 5:
+													  {
+																ut->ust_dooo();
+																break;
+													  }
+													  case 6:
+													  {
+																z++;
+																break;
+													  }
+													  }
+													  if (z != 0)
+														  break;
+												  }
+										}
+										case 2:
+										{
+												  z++;
+												  break;
+										}
+										case 3:
+										{
+												  z++;
+												  break;
+										}
+										}
+									}
+									if (z != 0)
+										break;
+								}
+								break;
+					  }
+					  case 4:
+					  {
+								file_save(vovos, right, user_name);
+								break;
+					  }
+					  case 5:
+					  {
+								vovos = load_file(right2);
+								break;
+					  }
+					  case 6:
+					  {
+								print_smth(vovos);
+								break;
+					  }
+					  case 7:
+					  {
+								trans_sybd(vovos, vfru);
+								break;
+					  }
+					  case 8:
+					  {
+								double tem = profit(vovos);
+								cout << "Profits from the sale of vegetables stock including tax equal is " << tem << endl;
+								break;
+					  }
+					  case 9:
+					  {
+								t++;
+								break;
+					  }
+					  }
+					  if (t != 0)
+						  break;
+				  }
 				  break;
 		}
-		case 2:
-		{
-				  add_smth(vfru);
-				  break;
-		}
+				case 2:
+				{
+						  while (1)
+						  {
+							  t = 0;
+							  cout << "What you want to do?\n1. Add a new fruit\n2. Delete an existing fruit\n3. Find a fruit in BBase\n4. Save BBase of fruit to disk\n5. Load BBase of fruit from the disk\n6. Show BBase of fruit on the screen\n7. Move product to the category 'Vegetable' \n8. Profits from the sale of all fruit stock including tax equal\n9.Return to previous menu\n" << endl;
+							  cin >> h;
+							  switch (h)
+							  {
+							  case 1:
+							  {
+										add_smth(vfru);
+										break;
+							  }
+							  case 2:
+							  {
+										delete_smth(vfru);
+										break;
+							  }
+							  case 3:
+							  {
+										string str;
+										int f;
+										while (1)
+										{
+											int z = 0;
+											cout << "Enter name of fruit to search:\n" << endl;
+											cin >> str;
+											vector<fruit>::iterator ut = search_smth(vfru, str);
+											if (ut != vfru.end())
+											{
+												cout << "Change information about it?\n1.Yes\n2.No\n3.Return to menu\n\n\n";
+												cin >> f;
+												switch (f)
+												{
+												case 1:
+												{
+														  while (1)
+														  {
+															  int k;
+															  cout << "What would you like to change?\n1.The name\n2.The price (1 lb)\n3.Origin country\n4.Amount (in lb)\n5. Shelf life (in month)\n6. Return to previous menu\n\n\n";
+															  cin >> k;
+															  switch (k)
+															  {
+															  case 1:
+															  {
+																		cout << "Enter new fruit name: \n";
+																		ut->ust_string();
+																		break;
+															  }
+															  case 2:
+															  {
+																		cout << "Enter new fruit price:\n";
+																		ut->ust_double();
+																		break;
+															  }
+															  case 3:
+															  {
+																		cout << "Enter a new origin country\n";
+																		ut->ust_smth();
+																		break;
+															  }
+															  case 4:
+															  {
+																		cout << "Enter new fruit amount (in lb)\n";
+																		ut->ust_doub();
+																		break;
+															  }
+															  case 5:
+															  {
+																		ut->ust_dooo();
+																		break;
+															  }
+															  case 6:
+															  {
+																		z++;
+																		break;
+															  }
+															  }
+															  if (z != 0)
+																  break;
+														  }
+												}
+												case 2:
+												{
+														  z++;
+														  break;
+												}
+												case 3:
+												{
+														  z++;
+														  break;
+												}
+												}
+											}
+											if (z != 0)
+												break;
+										}
+										break;
+							  }
+							  case 4:
+							  {
+										file_save(vfru, right, user_name);
+										break;
+							  }
+							  case 5:
+							  {
+										vfru = load_file(right);
+										break;
+							  }
+							  case 6:
+							  {
+										print_smth(vfru);
+										break;
+							  }
+							  case 7:
+							  {
+										trans_sybd(vfru, vovos);
+										break;
+							  }
+							  case 8:
+							  {
+										double temp = profit(vfru);
+										cout << "Profits from the sale of fruit stock including tax equal is " << temp << endl;
+										break;
+							  }
+							  case 9:
+							  {
+										t++;
+										break;
+							  }
+							  }
+							  if (t != 0)
+								  break;
+						  }
+						  break;
+				}
 		case 3:
 		{
-				  delete_smth(vovos);
+				  e++;
 				  break;
 		}
-		case 4:
-		{
-				  delete_smth(vfru);
-				  break;
 		}
-		case 5:
-		{
-				  string str;
-				  int f;
-				  while (1)
-				  {
-					  cout << "Enter name of vegetable to search:\n" << endl;
-					  cin >> str;
-					  vector<ovos>::iterator ut = search_smth(vovos, str);
-					  if (ut != vovos.end())
-					  {
-						  cout << "Change information about it?\n1.Yes\n2.No\n3.Return to menu\n\n\n";
-						  cin >> f;
-						  switch (f)
-						  {
-						  case 1:
-						  {
-									while (1)
-									{
-										int k;
-										cout << "What would you like to change?\n1.The name\n2.The price (1 lb)\n3.GMO\n4.Amount (in lb)\n5. Return to previous menu\n\n\n";
-										cin >> k;
-										switch (k)
-										{
-										case 1:
-										{
-												  cout << "Enter new vegetable name: \n";
-												  ut->ust_string();
-										}
-										case 2:
-										{
-												  cout << "Enter new vegetable price:\n";
-												  ut->ust_double();
-										}
-										case 3:
-										{
-												  cout << "Enter a new indicator of presence of GMOs (1 - yes, 0 - no)\n";
-												  ut->ust_bool();
-										}
-										case 4:
-										{
-												  cout << "Enter new vegetable amount (in lb)\n";
-												  ut->ust_doub();
-										}
-										case 5: break;
-										}
-									}
-						  }
-						  case 2: break;
-						  case 3: break;
-						  }
-					  }
-				  }
-				  break;
-		}
-		case 6:
-		{
-				  string str;
-				  int f;
-				  while (1)
-				  {
-					  cout << "Enter name of fruit to search:\n" << endl;
-					  cin >> str;
-					  vector<fruit>::iterator ut = search_smth(vfru, str);
-					  if (ut != vfru.end())
-					  {
-						  cout << "Change information about it?\n1.Yes\n2.No\n3.Return to menu\n\n\n";
-						  cin >> f;
-						  switch (f)
-						  {
-						  case 1:
-						  {
-									while (1)
-									{
-										int k;
-										cout << "What would you like to change?\n1.The name\n2.The price (1 lb)\n3.Country of origin\n4.Amount (in lb)\n5. Return to previous menu\n\n\n";
-										cin >> k;
-										switch (k)
-										{
-										case 1:
-										{
-												  cout << "Enter new fruit name: \n";
-												  ut->ust_string();
-										}
-										case 2:
-										{
-												  cout << "Enter new fruit price:\n";
-												  ut->ust_double();
-										}
-										case 3:
-										{
-												  cout << "Enter new fruit country of origin\n";
-												  ut->ust_smth();
-										}
-										case 4:
-										{
-												  cout << "Enter new fruit amount (in lb)\n";
-												  ut->ust_doub();
-										}
-										case 5: break;
-										}
-									}
-						  }
-						  case 2: break;
-						  case 3: break;
-						  }
-					  }
-				  }
-				  break;
-		}
-		case 7:
-		{
-				  file_save(vovos, right, user_name);
-				  break;
-		}
-		case 8:
-		{
-				  file_save(vfru, right, user_name);
-				  break;
-		}
-		case 9:
-		{
-				  vovos = load_file(right2);
-				  break;
-		}
-		case 10:
-		{
-				   vfru = load_file(right);
-				   break;
-		}
-		case 11:
-		{
-				   print_smth(vovos);
-				   break;
-		}
-		case 12:
-		{
-				   print_smth(vfru);
-				   break;
-		}
-		case 13:
-		{
-				   t++;
-				   break;
-		}
-		}
-		if (t!=0)
-		break;
+			if (e != 0)
+				break;
 	}
 }
+
 void reg(vector<password>& vpas)
 {
 	string sdf, dfg;
